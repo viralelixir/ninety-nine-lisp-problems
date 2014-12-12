@@ -235,7 +235,7 @@ defmodule LispList do
     end
 
 
-    defp replicate0([], acc, count) do
+    defp replicate0([], acc, _) do
         acc
     end
 
@@ -264,4 +264,142 @@ defmodule LispList do
         drop0(tail, count, acc ++ [head], k - 1)
     end
 
+
+    def split(list, count) when is_list(list) do
+        split0(list, count, [[], []])
+    end
+
+
+    defp split0([], _, acc) do
+        acc
+    end
+
+
+    defp split0([head | tail], 0, [t1, t2]) do
+        split0(tail, 0, [t1, t2 ++ [head]])
+    end
+
+
+    defp split0([head | tail], count, [t1, t2]) do
+        split0(tail, count - 1, [t1 ++ [head], t2])
+    end
+
+
+    def slice(list, left, right) when is_list(list) when left <= right do
+        slice0(list, left, right, [])
+    end
+
+
+    defp slice0(_, _, 0, acc) do
+        acc
+    end
+
+
+    defp slice0([head | tail], 1, right, acc) do
+        slice0(tail, 1, right - 1, acc ++ [head])
+    end
+
+
+    defp slice0([_ | tail], left, right, acc) do
+        slice0(tail, left - 1, right - 1, acc)
+    end
+
+
+    def rotate(list, count) do
+        c = rem(LispList.count(list) + count, LispList.count(list))
+        [t1, t2] = LispList.split(list, c)
+        t2 ++ t1
+    end
+
+
+    def remove(list, k) when k >= 0 do
+        remove0(list, k, [])
+    end
+
+
+    defp remove0([], _, acc) do
+        acc
+    end
+
+
+    defp remove0([_ | tail], 1, acc) do
+        remove0(tail, 0, acc)
+    end
+
+
+    defp remove0([head | tail], k, acc) do
+        remove0(tail, k - 1, acc ++ [head])
+    end
+
+
+    def insert(list, k, elem) when k >= 0 do
+        insert0(list, k, elem, [])
+    end
+
+
+    defp insert0([], _, _, acc) do
+        acc
+    end
+
+
+    defp insert0([head | tail], 1, elem, acc) do
+        insert0(tail, 0, elem, acc ++ [elem, head])
+    end
+
+
+    defp insert0([head | tail], k, elem, acc) do
+        insert0(tail, k - 1, elem, acc ++ [head])
+    end
+
+
+    def range(left, right) when left <= right do
+        range0(left, right, [])
+    end
+
+
+    defp range0(right, right, acc) do
+        acc ++ [right]
+    end
+
+
+    defp range0(left, right, acc) do
+        range0(left + 1, right, acc ++ [left])
+    end
+
+
+    def rnd_select(list, count) when is_list(list) do
+        :random.seed(:erlang.now)
+        rnd_select0(list, count, [])
+    end
+
+
+    defp rnd_select0(_, 0, acc) do
+        acc
+    end
+
+
+    defp rnd_select0(list, count, acc) do
+        k = :random.uniform(LispList.count(list))
+        rnd_select0(remove(list, k), count - 1, acc ++ [get0(list, k)])
+    end
+
+
+    defp get0([head | _], 1) do
+        head
+    end
+
+
+    defp get0([_ | tail], k) when k > 1 do
+        get0(tail, k - 1)
+    end
+
+
+    def lotto_select(range, count) when count <= range do
+        rnd_select(range(1, range), count)
+    end
+
+
+    def rnd_permu(list) when is_list(list) do
+        rnd_select(list, LispList.count(list))
+    end
 end

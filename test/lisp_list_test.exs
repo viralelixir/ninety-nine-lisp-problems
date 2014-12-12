@@ -139,8 +139,65 @@ defmodule LispListTest do
         == ['a', 'a', 'a', 'b', 'b', 'b', 'c', 'c', 'c', 'c', 'c', 'c', 'd', 'd', 'd']
   end
 
-  test "rdrop every n'th element from a crazy list" do
+  test "drop every n'th element from a crazy list" do
     assert LispList.drop(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k'], 3)
         == ['a', 'b', 'd', 'e', 'g', 'h', 'k']
+  end
+
+  test "split a list into two parts" do
+    assert LispList.split(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k'], 3)
+        == [['a', 'b', 'c'], ['d', 'e', 'f', 'g', 'h', 'i', 'k']]
+  end
+
+  test "extract a slice from a list" do
+    assert LispList.slice(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k'], 3, 7)
+        == ['c', 'd', 'e', 'f', 'g']
+  end
+
+  test "rotate a list n places to the left" do
+    assert LispList.rotate(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], 3)
+        == ['d', 'e', 'f', 'g', 'h', 'a', 'b', 'c']
+  end
+
+  test "rotate a list -n places to the left" do
+    assert LispList.rotate(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], -2)
+        == ['g', 'h', 'a', 'b', 'c', 'd', 'e', 'f']
+  end
+
+  test "remove the k'th element from a list" do
+    assert LispList.remove(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], 5)
+        == ['a', 'b', 'c', 'd', 'f', 'g', 'h']
+  end
+
+  test "insert an element at a given position into a list" do
+    assert LispList.insert(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], 5, 'alpha')
+        == ['a', 'b', 'c', 'd', 'alpha', 'e', 'f', 'g', 'h']
+  end
+
+  test "create a list containing all integers within a given range" do
+    assert LispList.range(4, 9) == [4, 5, 6, 7, 8, 9]
+  end
+
+  test "extract a given number of randomly selected elements from a list" do
+    list = LispList.rnd_select(['a', 'b', 'c', 'd', 'e', 'f'], 3)
+    assert Enum.count(list) == 3
+  end
+
+  test "extract a given number of randomly selected elements from a list" do
+    list = LispList.rnd_select(['a', 'b', 'c', 'd', 'e'], 1)
+    assert Enum.count(list) == 1
+  end
+
+  test "Lotto: draw n different random numbers from the set 1..m" do
+    list = LispList.lotto_select(49, 6)
+    assert Enum.count(list) == 6
+  end
+
+  test "generate a random permutation of the elements of a list" do
+    list1 = [1, 2, 3, 4, 5]
+    list2 = LispList.rnd_permu(list1)
+    assert Enum.count(list1) == Enum.count(list2)
+    assert list1 |> Enum.all? &Enum.member?(list2, &1)
+    assert list2 |> Enum.all? &Enum.member?(list1, &1)
   end
 end

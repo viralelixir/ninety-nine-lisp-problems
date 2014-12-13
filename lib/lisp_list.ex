@@ -402,4 +402,43 @@ defmodule LispList do
     def rnd_permu(list) when is_list(list) do
         rnd_select(list, LispList.count(list))
     end
+
+
+    def isPrime?(n) when n > 0 do
+        isPrime0?(n, n - 1)
+    end
+
+
+    defp isPrime0?(1, _) do
+        true
+    end
+
+
+    defp isPrime0?(n, 1) do
+        true
+    end
+
+
+    defp isPrime0?(n, k) do
+        rem(n, k) != 0 && isPrime0?(n, k - 1)
+    end
+
+
+    def list_primes(left..right) when left > 0 do
+        list_primes0(left, right, [])
+    end
+
+
+    defp list_primes0(right, right, acc) do
+        acc
+    end
+
+
+    defp list_primes0(left, right, acc) do
+        acc = case isPrime?(left) do
+            true -> acc ++ [left]
+            false -> acc
+        end
+        list_primes0(left + 1, right, acc)
+    end
 end

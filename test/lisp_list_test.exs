@@ -183,7 +183,7 @@ defmodule LispListTest do
     assert Enum.count(list) == 3
   end
 
-  test "extract a given number of randomly selected elements from a list" do
+  test "extract 1 element from a list" do
     list = LispList.rnd_select(['a', 'b', 'c', 'd', 'e'], 1)
     assert Enum.count(list) == 1
   end
@@ -199,5 +199,17 @@ defmodule LispListTest do
     assert Enum.count(list1) == Enum.count(list2)
     assert list1 |> Enum.all? &Enum.member?(list2, &1)
     assert list2 |> Enum.all? &Enum.member?(list1, &1)
+  end
+
+  test "determine whether a given integer number is prime" do
+    assert LispList.isPrime?(1)
+    assert LispList.isPrime?(2)
+    assert LispList.isPrime?(17)
+    assert !LispList.isPrime?(10)
+    assert !LispList.isPrime?(21)
+  end
+
+  test "a list of prime numbers" do
+    assert LispList.list_primes(1..10) == [1, 2, 3, 5, 7]
   end
 end

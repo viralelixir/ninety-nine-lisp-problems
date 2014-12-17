@@ -201,12 +201,57 @@ defmodule LispListTest do
     assert list2 |> Enum.all? &Enum.member?(list1, &1)
   end
 
+  test "generate the combinations of 0 distinct objects chosen from the 3 elements of a list" do
+    combinations = LispList.combinations(0, [1, 2, 3])
+    assert 1 == Enum.count(combinations)
+  end
+
+  test "generate the combinations of 1 distinct objects chosen from the 1 elements of a list" do
+    combinations = LispList.combinations(1, [1])
+    assert 1 == Enum.count(combinations)
+  end
+
+  test "generate the combinations of 1 distinct objects chosen from the 3 elements of a list" do
+    combinations = LispList.combinations(1, [1, 2, 3])
+    assert 3 == Enum.count(combinations)
+  end
+
+  test "generate the combinations of 2 distinct objects chosen from the 3 elements of a list" do
+    combinations = LispList.combinations(2, [1, 2, 3])
+    assert 3 == Enum.count(combinations)
+  end
+
+  test "generate the combinations of k distinct objects chosen from the n elements of a list" do
+    combinations = LispList.combinations(3, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+    assert 220 == Enum.count(combinations)
+  end
+
   test "determine whether a given integer number is prime" do
     assert LispList.isPrime?(1)
     assert LispList.isPrime?(2)
     assert LispList.isPrime?(17)
     assert !LispList.isPrime?(10)
     assert !LispList.isPrime?(21)
+  end
+
+  test "determine the greatest common divisor of 36 and 63" do
+    assert LispList.gcd(36, 63) == 9
+  end
+
+  test "determine whether 35 and 64 are coprime" do
+    assert LispList.coprime(35, 64)
+  end
+
+  test "determine whether 75 and 100 are coprime" do
+    assert !LispList.coprime(75, 100)
+  end
+
+  test "calculate Euler's totient function phi(10)" do
+    assert LispList.totient_phi(10) == 4
+  end
+
+  test "determine the prime factors of 315" do
+    assert LispList.prime_factors(315) == [3, 3, 5, 7]
   end
 
   test "a list of prime numbers" do

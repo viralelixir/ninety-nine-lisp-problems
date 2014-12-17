@@ -404,6 +404,34 @@ defmodule LispList do
     end
 
 
+    def combinations(k, list) when is_list(list) and k <= length(list) do
+        combinations0(k, list, k, [[]])
+    end
+
+
+    defp combinations0(_, _, 0, acc) do
+        acc
+    end
+
+
+    defp combinations0(k, list, j, acc) when k <= length(list) and j <= k do
+        l = for elem <- list, subset <- acc do Enum.sort(union([elem], subset)) end
+            |> Enum.filter(&Enum.count(&1) == k - j + 1)
+            |> Enum.uniq
+        combinations0(k, list, j - 1, l)
+    end
+
+
+    defp union(list1, list2) when is_list(list1) and is_list(list2) do
+        Set.to_list(
+            Set.union(
+                Enum.into(list1, HashSet.new),
+                Enum.into(list2, HashSet.new)
+            )
+        )
+    end
+
+
     def isPrime?(n) when n > 0 do
         isPrime0?(n, n - 1)
     end
@@ -414,13 +442,61 @@ defmodule LispList do
     end
 
 
-    defp isPrime0?(n, 1) do
+    defp isPrime0?(_, 1) do
         true
     end
 
 
     defp isPrime0?(n, k) do
         rem(n, k) != 0 && isPrime0?(n, k - 1)
+    end
+
+
+    def gcd(a, 0) do
+        a
+    end
+
+
+    def gcd(a, b) do
+        gcd(b, rem(a, b))
+    end
+
+
+    def coprime(a, b) do
+        case gcd(a, b) do
+            1 -> true
+            _ -> false
+        end
+    end
+
+
+    def totient_phi(1) do
+        1
+    end
+
+
+    def totient_phi(m) when m >= 0 do
+        1..m |> Enum.filter(&coprime(&1, m)) |> Enum.count
+    end
+
+
+    def prime_factors(n) do
+        prime_factors0(n, 2, [])
+    end
+
+
+    def prime_factors0(n, f, acc) when f * f > n do
+        acc ++ [n]
+    end
+
+
+    def prime_factors0(n, f, acc) when rem(n, f) == 0 do
+        prime_factors0(div(n, f), f, acc ++ [f])
+    end
+
+
+    def prime_factors0(n, f, acc) do
+        prime_factors0(n, f + 1, acc)
     end
 
 

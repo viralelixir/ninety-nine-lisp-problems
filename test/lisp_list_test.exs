@@ -266,4 +266,8 @@ defmodule LispListTest do
   test "a list of prime numbers" do
     assert LispList.list_primes(1..10) == [1, 2, 3, 5, 7]
   end
+
+  test "Goldbach's conjecture" do
+    assert LispList.goldbach(28) == {5, 23}
+  end
 end

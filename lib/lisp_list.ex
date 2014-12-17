@@ -542,4 +542,18 @@ defmodule LispList do
         end
         list_primes0(left + 1, right, acc)
     end
+
+
+    def goldbach(n) when n >= 0 do
+        goldbach0(n, list_primes(1..n))
+    end
+
+
+    defp goldbach0(n, primes = [head | tail]) do
+        l = primes |> Enum.filter(fn x -> x == n - head end)
+        case l do
+            []      -> goldbach0(n, tail)
+            [h | _] -> {head, h}
+        end
+    end
 end

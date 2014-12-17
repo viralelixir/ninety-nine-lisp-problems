@@ -254,6 +254,15 @@ defmodule LispListTest do
     assert LispList.prime_factors(315) == [3, 3, 5, 7]
   end
 
+  test "determine the prime factors and their multiplicity of 315" do
+    assert LispList.prime_factors_mult(315) == [{3, 2}, {5, 1}, {7, 1}]
+  end
+
+  test "calculate Euler's totient function phi(m) (improved)" do
+    assert LispList.phi(23) == LispList.totient_phi(23)
+    assert LispList.phi(47) == LispList.totient_phi(47)
+  end
+
   test "a list of prime numbers" do
     assert LispList.list_primes(1..10) == [1, 2, 3, 5, 7]
   end

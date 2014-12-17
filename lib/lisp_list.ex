@@ -476,7 +476,7 @@ defmodule LispList do
 
 
     def totient_phi(m) when m >= 0 do
-        1..m |> Enum.filter(&coprime(&1, m)) |> Enum.count
+        1..(m - 1) |> Enum.filter(&coprime(&1, m)) |> Enum.count
     end
 
 
@@ -497,6 +497,31 @@ defmodule LispList do
 
     def prime_factors0(n, f, acc) do
         prime_factors0(n, f + 1, acc)
+    end
+
+
+    def prime_factors_mult(n) do
+        prime_factors_mult0(prime_factors(n), [])
+    end
+
+
+    defp prime_factors_mult0([], acc) do
+        reverse(acc)
+    end
+
+
+    defp prime_factors_mult0([head | tail1], [{head, n} | tail2]) do
+        prime_factors_mult0(tail1, [{head, n + 1} | tail2])
+    end
+
+
+    defp prime_factors_mult0([head | tail], acc) do
+        prime_factors_mult0(tail, [{head, 1} | acc])
+    end
+
+
+    def phi(m) do
+        Enum.map(prime_factors_mult(m), fn {p, m} -> (p - 1) * :math.pow(p, m - 1) end) |> Enum.sum
     end
 
 

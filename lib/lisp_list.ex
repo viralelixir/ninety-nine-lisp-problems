@@ -556,4 +556,80 @@ defmodule LispList do
             [h | _] -> {head, h}
         end
     end
+
+
+    def defand(a, b) when is_boolean(a) and is_boolean(b) do
+        case {a, b} do
+            {true,  true}  -> true
+            {true,  false} -> false
+            {false, true}  -> false
+            {false, false} -> false
+        end
+    end
+
+
+    def defor(a, b) when is_boolean(a) and is_boolean(b) do
+        case {a, b} do
+            {true,  true}  -> true
+            {true,  false} -> true
+            {false, true}  -> true
+            {false, false} -> false
+        end
+    end
+
+
+    def defnot(a) when is_boolean(a) do
+        case a do
+            true  -> false
+            false -> true
+        end
+    end
+
+
+    def defnand(a, b) when is_boolean(a) and is_boolean(b) do
+        defnot(defand(a, b))
+    end
+
+
+    def defnor(a, b) when is_boolean(a) and is_boolean(b) do
+        defnot(defor(a, b))
+    end
+
+
+    def defxor(a, b) when is_boolean(a) and is_boolean(b) do
+        case {a, b} do
+            {true,  true}  -> false
+            {true,  false} -> true
+            {false, true}  -> true
+            {false, false} -> false
+        end
+    end
+
+
+    def defimp(a, b) when is_boolean(a) and is_boolean(b) do
+        case {a, b} do
+            {true,  true}  -> true
+            {true,  false} -> false
+            {false, true}  -> true
+            {false, false} -> true
+        end
+    end
+
+
+    def defequ(a, b) when is_boolean(a) and is_boolean(b) do
+        case {a, b} do
+            {true,  true}  -> true
+            {true,  false} -> false
+            {false, true}  -> false
+            {false, false} -> true
+        end
+    end
+
+
+    def table(f) when is_function(f) do
+        for first <- [true, false], second <- [true, false] do 
+            IO.puts("#{first} \t #{second} \t #{f.(first, second)}")
+        end
+        :ok
+    end
 end

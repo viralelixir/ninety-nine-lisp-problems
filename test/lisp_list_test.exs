@@ -270,4 +270,32 @@ defmodule LispListTest do
   test "Goldbach's conjecture" do
     assert LispList.goldbach(28) == {5, 23}
   end
+
+  test "truth table for defand/2" do
+    assert LispList.defand(true, true)
+  end
+
+  test "truth table for defor/2" do
+    assert LispList.defor(true, false)
+  end
+
+  test "truth table for defnand/2" do
+    assert LispList.defnand(false, false)
+  end
+
+  test "truth table for defnor/2" do
+    assert LispList.defnor(false, false)
+  end
+
+  test "truth table for defxor/2" do
+    assert LispList.defxor(true, false)
+  end
+
+  test "truth table for defimp/2" do
+    assert LispList.defimp(true, true)
+  end
+
+  test "truth table for defequ/2" do
+    assert LispList.defequ(false, false)
+  end
 end

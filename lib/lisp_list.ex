@@ -368,7 +368,7 @@ defmodule LispList do
 
 
     def rnd_select(list, count) when is_list(list) do
-        :random.seed(:erlang.now)
+        :undefined = :random.seed(:erlang.now)
         rnd_select0(list, count, [])
     end
 

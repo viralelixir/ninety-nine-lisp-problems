@@ -17,6 +17,7 @@ defmodule DownloadEx.Mixfile do
 
   defp deps do
     [
+      {:mr_t, "~> 0.5.0", only: [:test, :dev]},
       {:excoveralls, "~> 0.3", only: [:dev, :test]}
     ]
   end

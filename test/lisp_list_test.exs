@@ -197,8 +197,8 @@ defmodule LispListTest do
     list1 = [1, 2, 3, 4, 5]
     list2 = LispList.rnd_permu(list1)
     assert Enum.count(list1) == Enum.count(list2)
-    assert list1 |> Enum.all? &Enum.member?(list2, &1)
-    assert list2 |> Enum.all? &Enum.member?(list1, &1)
+    assert list1 |> Enum.all?(&Enum.member?(list2, &1))
+    assert list2 |> Enum.all?(&Enum.member?(list1, &1))
   end
 
   test "generate the combinations of 0 distinct objects chosen from the 3 elements of a list" do

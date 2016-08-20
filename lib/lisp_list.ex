@@ -247,13 +247,9 @@ defmodule LispList do
   def combinations(k, list) when is_list(list) and k <= length(list) do
     combinations0(k, list, k, [[]])
   end
-
-
   defp combinations0(_, _, 0, acc) do
     acc
   end
-
-
   defp combinations0(k, list, j, acc) when k <= length(list) and j <= k do
     l = for elem <- list, subset <- acc do Enum.sort(union([elem], subset)) end
         |> Enum.filter(&Enum.count(&1) == k - j + 1)
@@ -280,13 +276,9 @@ defmodule LispList do
   defp isPrime0?(1, _) do
     true
   end
-
-
   defp isPrime0?(_, 1) do
     true
   end
-
-
   defp isPrime0?(n, k) do
     rem(n, k) != 0 && isPrime0?(n, k - 1)
   end
@@ -295,8 +287,6 @@ defmodule LispList do
   def gcd(a, 0) do
     a
   end
-
-
   def gcd(a, b) do
     gcd(b, rem(a, b))
   end

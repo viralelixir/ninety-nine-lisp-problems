@@ -1,135 +1,56 @@
 defmodule LispList do
 
-  def last([elem]) do
-    [elem]
-  end
+  def last([elem]),   do: [elem]
+  def last([_|tail]), do: last(tail)
 
 
-  def last([_|tail]) do
-    last(tail)
-  end
+  def last_but_one(list = [_, _]), do: list
+  def last_but_one([_ | tail]),    do: last_but_one(tail)
 
 
-  def last_but_one(list = [_, _]) do
-    list
-  end
+  def kth([head], _),     do: head
+  def kth([head | _], 1), do: head
+  def kth([_ | tail], k), do: kth(tail, k - 1)
 
 
-  def last_but_one([_ | tail]) do
-    last_but_one(tail)
-  end
+  def count([]),         do: 0
+  def count([_ | tail]), do: 1 + count(tail)
 
 
-  def kth([head], _) do
-    head
-  end
-
-
-  def kth([head | _], 1) do
-    head
-  end
-
-
-  def kth([_ | tail], k) do
-    kth(tail, k - 1)
-  end
-
-
-  def count([]) do
-    0
-  end
-
-
-  def count([_ | tail]) do
-    1 + count(tail)
-  end
-
-
-  def reverse(list) do
-    reverse0(list, [])
-  end
-
-
-  defp reverse0([], acc) do
-    acc
-  end
-
-
-  defp reverse0([head | tail], acc) do
-    reverse0(tail, [head] ++ acc)
-  end
+  def reverse(list),                 do: reverse0(list, [])
+  defp reverse0([], acc),            do: acc
+  defp reverse0([head | tail], acc), do: reverse0(tail, [head] ++ acc)
 
 
   def isPalindrome?(list) when is_list(list) do
     isPalindrome0(list, LispList.count(list))
   end
-
-
   defp isPalindrome0(_, length) when length <= 1 do
     true
   end
-
-
   defp isPalindrome0(list = [head | tail], length) do
     head == LispList.kth(list, length) && isPalindrome0(tail, length - 2)
   end
 
 
-  def flatten(list) when is_list(list) do
-    flatten0(list, [])
-  end
+  def flatten(list) when is_list(list), do: flatten0(list, [])
+  defp flatten0([], acc),               do: acc
+  defp flatten0([head | tail], acc) when is_list(head), do:
+      flatten0(tail, acc ++ flatten(head))
+  defp flatten0([head | tail], acc), do: flatten0(tail, acc ++ [head])
 
 
-  defp flatten0([], acc) do
-    acc
-  end
+  def unique(list) when is_list(list),  do: unique0(list, [])
+  defp unique0([], acc),                         do: LispList.reverse(acc)
+  defp unique0([head | tail], acc = [head | _]), do: unique0(tail, acc)
+  defp unique0([head | tail], acc),              do: unique0(tail, [head | acc])
 
 
-  defp flatten0([head | tail], acc) when is_list(head) do
-    flatten0(tail, acc ++ flatten(head))
-  end
-
-
-  defp flatten0([head | tail], acc) do
-    flatten0(tail, acc ++ [head])
-  end
-
-
-  def unique(list) when is_list(list) do
-    unique0(list, [])
-  end
-
-
-  defp unique0([], acc) do
-    LispList.reverse(acc)
-  end
-
-
-  defp unique0([head | tail], acc = [head | _]) do
-    unique0(tail, acc)
-  end
-
-
-  defp unique0([head | tail], acc) do
-    unique0(tail, [head | acc])
-  end
-
-
-  def pack(list) when is_list(list) do
-    pack0(list, [])
-  end
-
-
-  defp pack0([], acc) do
-    LispList.reverse(acc)
-  end
-
-
+  def pack(list) when is_list(list), do: pack0(list, [])
+  defp pack0([], acc),               do: LispList.reverse(acc)
   defp pack0([head | tail], [h = [head | _] | t]) do
     pack0(tail, [[head | h] | t])
   end
-
-
   defp pack0([head | tail], acc) do
     pack0(tail, [[head] | acc])
   end
@@ -138,18 +59,10 @@ defmodule LispList do
   def run_length(list) when is_list(list) do
     run_length0(list, [])
   end
-
-
-  defp run_length0([], acc) do
-    LispList.reverse(acc)
-  end
-
-
+  defp run_length0([], acc), do: LispList.reverse(acc)
   defp run_length0([head | tail], [{head, count} | t]) do
     run_length0(tail, [{head, count + 1} | t])
   end
-
-
   defp run_length0([head | tail], acc) do
     run_length0(tail, [{head, 1} | acc])
   end
@@ -158,23 +71,15 @@ defmodule LispList do
   def modified_run_length(list) when is_list(list) do
     modified_run_length0(list, [])
   end
-
-
   defp modified_run_length0([], acc) do
     LispList.reverse(acc)
   end
-
-
   defp modified_run_length0([head | tail], [{head, count} | t]) do
     modified_run_length0(tail, [{head, count + 1} | t])
   end
-
-
   defp modified_run_length0([head | tail], [{ahead, 1} | atail]) do
     modified_run_length0(tail, [{head, 1}, ahead | atail])
   end
-
-
   defp modified_run_length0([head | tail], acc) do
     modified_run_length0(tail, [{head, 1} | acc])
   end
@@ -183,18 +88,12 @@ defmodule LispList do
   def decode_run_length(list) when is_list(list) do
     decode_run_length0(list, [])
   end
-
-
   defp decode_run_length0([], acc) do
     acc
   end
-
-
   defp decode_run_length0([{head, count} | tail], acc) do
     decode_run_length0(tail, acc ++ create_list(head, count))
   end
-
-
   defp decode_run_length0([head | tail], acc) do
     decode_run_length0(tail, acc ++ [head])
   end
@@ -203,43 +102,24 @@ defmodule LispList do
   defp create_list(elem, count) do
     create_list0(elem, count, [])
   end
-
-
   defp create_list0(_, 0, acc) do
     acc
   end
-
-
   defp create_list0(elem, count, acc) do
     create_list0(elem, count - 1, [elem | acc])
   end
 
 
-  def duplicate(list) do
-    duplicate0(list, [])
-  end
-
-
-  defp duplicate0([], acc) do
-    acc
-  end
-
-
-  defp duplicate0([head | tail], acc) do
-    duplicate0(tail, acc ++ [head, head])
-  end
-
+  def duplicate(list),                 do: duplicate0(list, [])
+  defp duplicate0([], acc),            do: acc
+  defp duplicate0([head | tail], acc), do: duplicate0(tail, acc ++ [head, head])
 
   def replicate(list, count) do
     replicate0(list, [], count)
   end
-
-
   defp replicate0([], acc, _) do
     acc
   end
-
-
   defp replicate0([head | tail], acc, count) do
     replicate0(tail, acc ++ create_list(head, count), count)
   end
@@ -248,18 +128,12 @@ defmodule LispList do
   def drop(list, count) do
     drop0(list, count, [], count)
   end
-
-
   defp drop0([], _, acc, _) do
-      acc
+    acc
   end
-
-
   defp drop0([_ | tail], count, acc, 1) do
     drop0(tail, count, acc, count)
   end
-
-
   defp drop0([head | tail], count, acc, k) do
     drop0(tail, count, acc ++ [head], k - 1)
   end
@@ -268,18 +142,12 @@ defmodule LispList do
   def split(list, count) when is_list(list) do
     split0(list, count, [[], []])
   end
-
-
   defp split0([], _, acc) do
     acc
   end
-
-
   defp split0([head | tail], 0, [t1, t2]) do
     split0(tail, 0, [t1, t2 ++ [head]])
   end
-
-
   defp split0([head | tail], count, [t1, t2]) do
     split0(tail, count - 1, [t1 ++ [head], t2])
   end
@@ -288,18 +156,12 @@ defmodule LispList do
   def slice(list, left, right) when is_list(list) when left <= right do
     slice0(list, left, right, [])
   end
-
-
   defp slice0(_, _, 0, acc) do
     acc
   end
-
-
   defp slice0([head | tail], 1, right, acc) do
     slice0(tail, 1, right - 1, acc ++ [head])
   end
-
-
   defp slice0([_ | tail], left, right, acc) do
     slice0(tail, left - 1, right - 1, acc)
   end
@@ -315,18 +177,12 @@ defmodule LispList do
   def remove(list, k) when k >= 0 do
     remove0(list, k, [])
   end
-
-
   defp remove0([], _, acc) do
     acc
   end
-
-
   defp remove0([_ | tail], 1, acc) do
     remove0(tail, 0, acc)
   end
-
-
   defp remove0([head | tail], k, acc) do
     remove0(tail, k - 1, acc ++ [head])
   end
@@ -335,18 +191,12 @@ defmodule LispList do
   def insert(list, k, elem) when k >= 0 do
     insert0(list, k, elem, [])
   end
-
-
   defp insert0([], _, _, acc) do
     acc
   end
-
-
   defp insert0([head | tail], 1, elem, acc) do
     insert0(tail, 0, elem, acc ++ [elem, head])
   end
-
-
   defp insert0([head | tail], k, elem, acc) do
     insert0(tail, k - 1, elem, acc ++ [head])
   end
@@ -355,13 +205,9 @@ defmodule LispList do
   def range(left, right) when left <= right do
     range0(left, right, [])
   end
-
-
   defp range0(right, right, acc) do
     acc ++ [right]
   end
-
-
   defp range0(left, right, acc) do
     range0(left + 1, right, acc ++ [left])
   end
@@ -371,13 +217,9 @@ defmodule LispList do
     :undefined = :random.seed(:erlang.now)
     rnd_select0(list, count, [])
   end
-
-
   defp rnd_select0(_, 0, acc) do
     acc
   end
-
-
   defp rnd_select0(list, count, acc) do
     k = :random.uniform(LispList.count(list))
     rnd_select0(remove(list, k), count - 1, acc ++ [get0(list, k)])
@@ -387,8 +229,6 @@ defmodule LispList do
   defp get0([head | _], 1) do
     head
   end
-
-
   defp get0([_ | tail], k) when k > 1 do
     get0(tail, k - 1)
   end
@@ -488,13 +328,9 @@ defmodule LispList do
   def prime_factors0(n, f, acc) when f * f > n do
     acc ++ [n]
   end
-
-
   def prime_factors0(n, f, acc) when rem(n, f) == 0 do
     prime_factors0(div(n, f), f, acc ++ [f])
   end
-
-
   def prime_factors0(n, f, acc) do
     prime_factors0(n, f + 1, acc)
   end
@@ -503,18 +339,12 @@ defmodule LispList do
   def prime_factors_mult(n) do
     prime_factors_mult0(prime_factors(n), [])
   end
-
-
   defp prime_factors_mult0([], acc) do
     reverse(acc)
   end
-
-
   defp prime_factors_mult0([head | tail1], [{head, n} | tail2]) do
     prime_factors_mult0(tail1, [{head, n + 1} | tail2])
   end
-
-
   defp prime_factors_mult0([head | tail], acc) do
     prime_factors_mult0(tail, [{head, 1} | acc])
   end
@@ -533,8 +363,6 @@ defmodule LispList do
   defp list_primes0(right, right, acc) do
     acc
   end
-
-
   defp list_primes0(left, right, acc) do
     acc = case isPrime?(left) do
       true -> acc ++ [left]
@@ -547,8 +375,6 @@ defmodule LispList do
   def goldbach(n) when n >= 0 do
     goldbach0(n, list_primes(1..n))
   end
-
-
   defp goldbach0(n, primes = [head | tail]) do
     l = primes |> Enum.filter(fn x -> x == n - head end)
     case l do

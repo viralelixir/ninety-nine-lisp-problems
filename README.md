@@ -11,3 +11,9 @@ In Elixir. They are fun and all recursive!
 Copyright (c) 2014-2015 [Florian J. Breunig](http://www.my-flow.com)
 
 Licensed under MIT, see LICENSE file.
+
+
+
+TODO:
+  reempliment statistical functions in Elixir, like:
+    https://github.com/uncomplicate/bayadera/blob/master/src/clojure/uncomplicate/bayadera/distributions.clj
